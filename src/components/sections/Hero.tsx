@@ -107,17 +107,15 @@ export default function Hero() {
               ref={headingRef}
               className="font-heading text-4xl font-bold leading-[1.1] text-text-light opacity-0 sm:text-5xl lg:text-6xl xl:text-7xl"
             >
-              Understand public opinion{" "}
-              <span className="text-gradient">before it becomes news.</span>
+              The future of{" "}
+              <span className="text-gradient">public opinion intelligence.</span>
             </h1>
 
             <p
               ref={descRef}
               className="mt-6 max-w-xl text-lg leading-relaxed text-text-light-secondary opacity-0 sm:text-xl"
             >
-              AI-powered polling simulations that deliver narrative insights in
-              seconds. Ask a question, get a story-driven analysis with strategic
-              recommendations.
+              Listen to what&apos;s forming — not just what&apos;s been measured.
             </p>
 
             <div ref={ctaRef} className="mt-8 flex flex-wrap gap-4 opacity-0">

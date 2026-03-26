@@ -136,69 +136,33 @@ export default function Differentiators() {
         {/* Header */}
         <div ref={headerRef} className="mb-16 text-center opacity-0">
           <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
-            Why CrowdVox
+            Daily listening into real-time understanding.
           </span>
           <h2 className="font-heading text-3xl font-bold text-text-light sm:text-4xl lg:text-5xl">
-            More Than Research. A Living Insight System.
+            With CrowdVox you can see what&apos;s coming, not just what&apos;s already happened.
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-text-light-secondary">
-            CrowdVox is designed for ongoing engagement, not one-off reports. We
-            believe people want to be heard — and that humanity belongs at the
-            center of data.
-          </p>
+          <a
+            href="#demo"
+            className="mt-6 inline-block rounded-full bg-primary px-8 py-3 text-base font-semibold text-white transition-all duration-300 hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25"
+          >
+            Hear For Yourself
+          </a>
         </div>
 
-        {/* Problem → Solution cards */}
-        <div ref={problemsRef} className="mb-20 grid gap-6 md:grid-cols-3">
-          {problems.map((item) => (
-            <AnimatedCard key={item.problem} glowOnHover>
-              <div className="prob-card relative h-full overflow-hidden rounded-2xl border border-white/5 bg-white/[0.03] p-6 opacity-0 transition-all hover:border-primary/20 hover:bg-white/[0.06]">
-                <div className="mb-4 flex items-start gap-3">
-                  <div className="shrink-0 rounded-lg bg-red-500/10 p-2">
-                    <item.icon className="h-5 w-5 text-red-400" />
-                  </div>
-                  <p className="text-sm font-medium text-text-light/70 line-through decoration-red-400/40">
-                    {item.problem}
-                  </p>
-                </div>
-
-                <div className="arrow-line my-3 flex origin-top justify-center opacity-0">
-                  <div className="h-6 w-px bg-gradient-to-b from-red-400/30 to-primary/50" />
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="shrink-0 rounded-lg bg-primary/10 p-2">
-                    <Sparkles className="h-5 w-5 text-primary" />
-                  </div>
-                  <p className="text-sm font-medium leading-relaxed text-text-light">
-                    {item.solution}
-                  </p>
-                </div>
-              </div>
-            </AnimatedCard>
-          ))}
-        </div>
-
-        {/* Feature cards */}
-        <div ref={featuresRef} className="grid gap-6 md:grid-cols-3">
-          {features.map((f) => (
-            <AnimatedCard key={f.title} glowOnHover>
-              <div className="feat-card rounded-2xl border border-white/5 bg-gradient-to-b from-white/[0.05] to-transparent p-8 opacity-0 transition-all hover:border-primary/20">
-                <motion.div
-                  whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.5 } }}
-                  className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10"
-                >
-                  <f.icon className="h-6 w-6 text-primary" />
-                </motion.div>
-                <h4 className="mb-2 font-heading text-lg font-semibold text-text-light">
-                  {f.title}
-                </h4>
-                <p className="text-sm leading-relaxed text-text-light-secondary">
-                  {f.description}
-                </p>
-              </div>
-            </AnimatedCard>
-          ))}
+        {/* Video */}
+        <div className="mt-12 flex justify-center">
+          <div className="w-full max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] shadow-2xl shadow-primary/5">
+            <video
+              className="h-auto w-full"
+              controls
+              playsInline
+              preload="metadata"
+              poster=""
+            >
+              <source src="https://crowdvox.ai/video/CrowdVox.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
         </div>
       </Container>
     </section>
