@@ -3,9 +3,18 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
+import dynamic from "next/dynamic";
 import Container from "@/components/layout/Container";
 import Button from "@/components/ui/Button";
-import ResearchConsole from "@/components/ui/ResearchConsole";
+
+const HeroRadar = dynamic(() => import("@/components/ui/HeroRadar"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex aspect-square w-full max-w-[540px] items-center justify-center">
+      <div className="h-16 w-16 animate-pulse rounded-full bg-primary/20" />
+    </div>
+  ),
+});
 
 export default function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -152,12 +161,12 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right: Console */}
+          {/* Right: Interactive Radar */}
           <div
             ref={consoleRef}
             className="flex justify-center opacity-0 lg:justify-end"
           >
-            <ResearchConsole />
+            <HeroRadar />
           </div>
         </div>
       </Container>

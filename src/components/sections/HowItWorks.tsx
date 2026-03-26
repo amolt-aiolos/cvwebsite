@@ -116,7 +116,7 @@ export default function HowItWorks() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-24 lg:py-32">
+    <section ref={sectionRef} data-theme="light" className="bg-bg-light py-24 lg:py-32">
       <Container>
         {/* Header */}
         <div ref={headerRef} className="mb-16 text-center opacity-0">

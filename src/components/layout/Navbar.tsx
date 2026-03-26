@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown } from "lucide-react";
@@ -13,18 +13,91 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+  const [isOverLight, setIsOverLight] = useState(false);
+
+  const detectBackground = useCallback(() => {
+    // Check which section the navbar is overlapping
+    const navHeight = 72;
+    const checkPoint = navHeight / 2;
+
+    // Find all sections and check if the navbar midpoint overlaps a light section
+    const sections = document.querySelectorAll("section, [data-theme]");
+    let overLight = false;
+
+    sections.forEach((section) => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= checkPoint && rect.bottom >= checkPoint) {
+        const theme = section.getAttribute("data-theme");
+        if (theme !== "dark") {
+          // Check if section has a light/white background
+          const bg = window.getComputedStyle(section).backgroundColor;
+          const isLightBg =
+            theme === "light" ||
+            section.classList.contains("bg-bg-light") ||
+            section.classList.contains("bg-white") ||
+            (bg && !bg.includes("0, 0, 0") && !bg.includes("10, 10, 15") && !bg.includes("20, 20, 32") && bg !== "rgba(0, 0, 0, 0)");
+          if (isLightBg) {
+            overLight = true;
+          }
+        }
+      }
+    });
+
+    setIsOverLight(overLight);
   }, []);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+      detectBackground();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    // Initial check
+    detectBackground();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [detectBackground]);
+
+  // Determine color scheme based on background
+  const navColors = isOverLight && scrolled
+    ? {
+        text: "text-text-dark/80",
+        textHover: "hover:text-text-dark",
+        textActive: "text-text-dark",
+        glass: "glass-nav-light",
+        border: "border-black/5",
+        mobileText: "text-text-dark/80",
+        mobileHover: "hover:text-text-dark hover:bg-black/5",
+        mobileBg: "bg-white",
+        mobileBorder: "border-black/5",
+        dropdownBg: "glass-nav-light",
+        dropdownHover: "hover:bg-black/5",
+        dropdownText: "text-text-dark",
+        dropdownSubtext: "text-text-dark-secondary",
+        logoFilter: "brightness-0",
+      }
+    : {
+        text: "text-text-light/80",
+        textHover: "hover:text-white",
+        textActive: "text-white",
+        glass: "glass",
+        border: "border-white/5",
+        mobileText: "text-text-light/80",
+        mobileHover: "hover:text-white hover:bg-white/5",
+        mobileBg: "bg-bg-dark",
+        mobileBorder: "border-white/5",
+        dropdownBg: "glass",
+        dropdownHover: "hover:bg-white/5",
+        dropdownText: "text-text-light",
+        dropdownSubtext: "text-text-light-secondary",
+        logoFilter: "",
+      };
 
   return (
     <header
       className={cn(
         "fixed top-0 z-50 w-full transition-all duration-300",
         scrolled
-          ? "glass border-b border-white/5 py-3"
+          ? `${navColors.glass} border-b ${navColors.border} py-3`
           : "bg-transparent py-5"
       )}
     >
@@ -36,7 +109,10 @@ export default function Navbar() {
             <img
               src={siteConfig.logo}
               alt={siteConfig.name}
-              className="h-8"
+              className={cn(
+                "h-8 transition-all duration-300",
+                isOverLight && scrolled ? "invert" : ""
+              )}
             />
           </Link>
 
@@ -53,7 +129,11 @@ export default function Navbar() {
               >
                 <Link
                   href={link.href}
-                  className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-text-light/80 transition-colors hover:text-white"
+                  className={cn(
+                    "flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                    navColors.text,
+                    navColors.textHover
+                  )}
                 >
                   {link.label}
                   {link.children && (
@@ -69,18 +149,24 @@ export default function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 8 }}
                       transition={{ duration: 0.2 }}
-                      className="glass absolute left-0 top-full mt-2 w-72 rounded-xl p-2"
+                      className={cn(
+                        "absolute left-0 top-full mt-2 w-72 rounded-xl p-2",
+                        navColors.dropdownBg
+                      )}
                     >
                       {link.children.map((child) => (
                         <Link
                           key={child.href}
                           href={child.href}
-                          className="block rounded-lg px-4 py-3 transition-colors hover:bg-white/5"
+                          className={cn(
+                            "block rounded-lg px-4 py-3 transition-colors",
+                            navColors.dropdownHover
+                          )}
                         >
-                          <span className="block text-sm font-medium text-text-light">
+                          <span className={cn("block text-sm font-medium", navColors.dropdownText)}>
                             {child.label}
                           </span>
-                          <span className="mt-0.5 block text-xs text-text-light-secondary">
+                          <span className={cn("mt-0.5 block text-xs", navColors.dropdownSubtext)}>
                             {child.description}
                           </span>
                         </Link>
@@ -104,7 +190,10 @@ export default function Navbar() {
 
           {/* Mobile Toggle */}
           <button
-            className="rounded-lg p-2 text-text-light lg:hidden"
+            className={cn(
+              "rounded-lg p-2 lg:hidden transition-colors",
+              isOverLight && scrolled ? "text-text-dark" : "text-text-light"
+            )}
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -119,7 +208,11 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden border-t border-white/5 bg-bg-dark lg:hidden"
+            className={cn(
+              "overflow-hidden border-t lg:hidden",
+              navColors.mobileBorder,
+              navColors.mobileBg
+            )}
           >
             <Container className="py-6">
               <div className="flex flex-col gap-2">
@@ -127,7 +220,11 @@ export default function Navbar() {
                   <div key={link.label}>
                     <Link
                       href={link.href}
-                      className="block rounded-lg px-4 py-3 text-sm font-medium text-text-light/80 hover:bg-white/5 hover:text-white"
+                      className={cn(
+                        "block rounded-lg px-4 py-3 text-sm font-medium",
+                        navColors.mobileText,
+                        navColors.mobileHover
+                      )}
                       onClick={() => setMobileOpen(false)}
                     >
                       {link.label}
@@ -136,7 +233,11 @@ export default function Navbar() {
                       <Link
                         key={child.href}
                         href={child.href}
-                        className="block rounded-lg px-8 py-2 text-sm text-text-light-secondary hover:text-white"
+                        className={cn(
+                          "block rounded-lg px-8 py-2 text-sm",
+                          navColors.dropdownSubtext,
+                          navColors.textHover
+                        )}
                         onClick={() => setMobileOpen(false)}
                       >
                         {child.label}
