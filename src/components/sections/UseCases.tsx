@@ -96,7 +96,7 @@ export default function UseCases() {
   }, []);
 
   return (
-    <section ref={sectionRef} data-theme="light" className="bg-bg-light py-24 lg:py-32">
+    <section id="how-we-do-it" ref={sectionRef} data-theme="light" className="bg-bg-light py-24 lg:py-32">
       <Container>
         {/* Header */}
         <div ref={headerRef} className="mb-16 text-center opacity-0">

@@ -319,13 +319,10 @@ export default function HowItWorks() {
   }, []);
 
   return (
-    <section ref={sectionRef} data-theme="light" className="bg-bg-light py-24 lg:py-32">
+    <section id="what-we-do" ref={sectionRef} data-theme="light" className="bg-bg-light py-24 lg:py-32">
       <Container>
         {/* Header */}
         <div ref={headerRef} className="mb-16 text-center opacity-0">
-          <span className="mb-4 inline-block rounded-full bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
-            How It Works
-          </span>
           <h2 className="font-heading text-3xl font-bold text-text-dark sm:text-4xl lg:text-5xl">
             Listening at Scale, Every Day
           </h2>

@@ -3,8 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown } from "lucide-react";
-import { navLinks, siteConfig } from "@/lib/constants";
+import { Menu, X } from "lucide-react";
+import { siteConfig } from "@/lib/constants";
 import Container from "./Container";
 import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -12,8 +12,22 @@ import { cn } from "@/lib/utils";
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isOverLight, setIsOverLight] = useState(false);
+
+  const onePageLinks = [
+    { label: "Watch Our Demo", href: "#demo" },
+    { label: "What We Do", href: "#what-we-do" },
+    { label: "How We Do It", href: "#how-we-do-it" },
+  ];
+
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
+      setMobileOpen(false);
+    }
+  };
 
   const detectBackground = useCallback(() => {
     // Check which section the navbar is overlapping
@@ -116,74 +130,27 @@ export default function Navbar() {
             />
           </Link>
 
-          {/* Desktop Nav */}
+          {/* Desktop Nav — One-pager anchors */}
           <div className="hidden items-center gap-1 lg:flex">
-            {navLinks.map((link) => (
-              <div
+            {onePageLinks.map((link) => (
+              <a
                 key={link.label}
-                className="relative"
-                onMouseEnter={() =>
-                  link.children && setOpenDropdown(link.label)
-                }
-                onMouseLeave={() => setOpenDropdown(null)}
+                href={link.href}
+                onClick={(e) => scrollToSection(e, link.href)}
+                className={cn(
+                  "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  navColors.text,
+                  navColors.textHover
+                )}
               >
-                <Link
-                  href={link.href}
-                  className={cn(
-                    "flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                    navColors.text,
-                    navColors.textHover
-                  )}
-                >
-                  {link.label}
-                  {link.children && (
-                    <ChevronDown className="h-3.5 w-3.5 opacity-50" />
-                  )}
-                </Link>
-
-                {/* Dropdown */}
-                <AnimatePresence>
-                  {link.children && openDropdown === link.label && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8 }}
-                      transition={{ duration: 0.2 }}
-                      className={cn(
-                        "absolute left-0 top-full mt-2 w-72 rounded-xl p-2",
-                        navColors.dropdownBg
-                      )}
-                    >
-                      {link.children.map((child) => (
-                        <Link
-                          key={child.href}
-                          href={child.href}
-                          className={cn(
-                            "block rounded-lg px-4 py-3 transition-colors",
-                            navColors.dropdownHover
-                          )}
-                        >
-                          <span className={cn("block text-sm font-medium", navColors.dropdownText)}>
-                            {child.label}
-                          </span>
-                          <span className={cn("mt-0.5 block text-xs", navColors.dropdownSubtext)}>
-                            {child.description}
-                          </span>
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                {link.label}
+              </a>
             ))}
           </div>
 
           {/* CTA */}
           <div className="hidden items-center gap-3 lg:flex">
-            <Button variant="secondary" size="sm" href="/pricing">
-              Pricing
-            </Button>
-            <Button size="sm" href="/contact">
+            <Button size="sm" href="#contact">
               Book a Demo
             </Button>
           </div>
@@ -216,40 +183,22 @@ export default function Navbar() {
           >
             <Container className="py-6">
               <div className="flex flex-col gap-2">
-                {navLinks.map((link) => (
-                  <div key={link.label}>
-                    <Link
-                      href={link.href}
-                      className={cn(
-                        "block rounded-lg px-4 py-3 text-sm font-medium",
-                        navColors.mobileText,
-                        navColors.mobileHover
-                      )}
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                    {link.children?.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        className={cn(
-                          "block rounded-lg px-8 py-2 text-sm",
-                          navColors.dropdownSubtext,
-                          navColors.textHover
-                        )}
-                        onClick={() => setMobileOpen(false)}
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                  </div>
+                {onePageLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    onClick={(e) => scrollToSection(e, link.href)}
+                    className={cn(
+                      "block rounded-lg px-4 py-3 text-sm font-medium",
+                      navColors.mobileText,
+                      navColors.mobileHover
+                    )}
+                  >
+                    {link.label}
+                  </a>
                 ))}
                 <div className="mt-4 flex flex-col gap-2">
-                  <Button href="/pricing" variant="secondary" size="sm">
-                    Pricing
-                  </Button>
-                  <Button href="/contact" size="sm">
+                  <Button href="#contact" size="sm">
                     Book a Demo
                   </Button>
                 </div>

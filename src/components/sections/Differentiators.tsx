@@ -125,6 +125,7 @@ export default function Differentiators() {
 
   return (
     <section
+      id="demo"
       ref={sectionRef}
       data-theme="dark"
       className="relative overflow-hidden py-24 lg:py-32"
@@ -162,6 +163,36 @@ export default function Differentiators() {
               <source src="https://crowdvox.ai/video/CrowdVox.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
+          </div>
+        </div>
+
+        {/* Built on Real Conversations */}
+        <div className="mt-24 lg:mt-32">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="font-heading text-3xl font-bold text-text-light sm:text-4xl lg:text-5xl">
+              Built on Real Conversations, Strengthened by Context.
+            </h2>
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-text-light-secondary">
+              Inside interviews, we may include structured questions, such as
+              message comparisons or scaled responses, to add clarity and
+              comparability. We then apply analytical tools to identify patterns,
+              shifts, and momentum across many conversations.
+            </p>
+          </div>
+
+          <div className="mx-auto mt-12 grid max-w-2xl gap-6 md:grid-cols-2">
+            <div className="rounded-2xl border border-white/5 bg-white/[0.03] p-8 transition-all duration-300 hover:border-primary/20 hover:bg-white/[0.06]">
+              <div className="mb-4 h-1 w-10 rounded-full bg-primary" />
+              <p className="text-lg font-medium leading-relaxed text-text-light">
+                We don&apos;t turn conversations into polling.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/5 bg-white/[0.03] p-8 transition-all duration-300 hover:border-primary/20 hover:bg-white/[0.06]">
+              <div className="mb-4 h-1 w-10 rounded-full bg-gradient-to-r from-primary to-accent" />
+              <p className="text-lg font-medium leading-relaxed text-text-light">
+                We turn listening into understanding.
+              </p>
+            </div>
           </div>
         </div>
       </Container>
